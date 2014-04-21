@@ -21,15 +21,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     product_id = serializers.CharField(max_length=5, write_only=True)
+    brand_name = serializers.SerializerMethodField()
     
     def validate_price(self, value):
         if value < 100 and value > 1000000:
             raise serializers.ValidationError('Price must be between 100 and 1,000,000.')
         return value
     
+    def get_brand_name(self, obj):
+        return obj.brand.name
+
     class Meta:
         model = Product
-        fields = ['product_id', 'name', 'slug', 'price', 'category', 'brand', 'sub_category', 'release_year', 'in_stock']
+        fields = ['product_id', 'name', 'slug', 'price', 'category', 'brand', 'brand_name', 'sub_category', 'release_year', 'in_stock']
         read_only_fields = ['slug']
 
 
