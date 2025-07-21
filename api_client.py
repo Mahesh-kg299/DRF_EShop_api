@@ -74,7 +74,7 @@ subCategoryClient = APIClient('http://127.0.0.1:8000/api/sub_categories/')
 #     }
 # )
 
-productClient.list()
+# productClient.list()
 # brandClient.list()
 # brandClient.detail('samsung')
 # brandClient.delete(1)

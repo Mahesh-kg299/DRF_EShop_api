@@ -38,7 +38,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class SubCategorySerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
+    products = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = SubCategory
@@ -46,8 +46,8 @@ class SubCategorySerializer(serializers.ModelSerializer):
         read_only_fields = ['slug']
 
 class CategorySerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
-    sub_categories = SubCategorySerializer(many=True, read_only=True)
+    products = serializers.StringRelatedField(many=True)
+    sub_categories = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Category
@@ -56,7 +56,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     
 class BrandSerializer(serializers.ModelSerializer):
-    products = ProductSerializer(many=True, read_only=True)
+    products = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = Brand

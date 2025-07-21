@@ -3,33 +3,29 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
 
-class Category(models.Model):
+class SluggedModel(models.Model):
     name = models.CharField(max_length=25, unique=True)
     slug = models.SlugField(unique=True)
+
+    class Meta:
+        abstract = True
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
-class Brand(models.Model):
-    name = models.CharField(max_length=25, unique=True)
-    slug = models.SlugField(unique=True)
+class Category(SluggedModel):
+    pass
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
+class Brand(SluggedModel):
+    pass
 
-class SubCategory(models.Model):
-    name = models.CharField(max_length=25, unique=True)
-    slug = models.SlugField(unique=True)
+class SubCategory(SluggedModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='sub_categories')
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
+    def __str__(self):
+        return self.name
 
 class Product(models.Model):
     product_id = models.CharField(max_length=5, primary_key=True)
@@ -51,6 +47,9 @@ class Product(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return f'{self.brand.name} {self.name}'
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts')
